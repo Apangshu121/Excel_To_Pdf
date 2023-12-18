@@ -101,7 +101,7 @@ public class DemoApplication {
 
 			//The draw method is called on the current chart object, which draws the chart onto the Graphics2D object. The chart is drawn within a rectangle that has the same width as an A4 page and the specified chart height.
 
-			charts[i].draw(graphics2D, new Rectangle2D.Double(0, 0, PageSize.A4.getWidth() / 2, chartHeight));
+			charts[i].draw(graphics2D, new Rectangle2D.Double(0, 0, PageSize.A4.getWidth(), chartHeight));
 
 			//The Graphics2D object is disposed of to free up system resources.
 			graphics2D.dispose();
