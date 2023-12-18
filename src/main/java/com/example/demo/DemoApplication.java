@@ -33,8 +33,10 @@ public class DemoApplication {
 	private static void createAPdf()
 	{
 		try{
+			//PDF document with the A4 page size is created
 			document = new Document(PageSize.A4);
 			String filename = "queries.pdf";
+			// PdfWriter instance for writing content to the PDF file.
 			writer = PdfWriter.getInstance(document,new FileOutputStream(filename));
 		}catch (DocumentException e) {
 			e.printStackTrace();
@@ -78,21 +80,24 @@ public class DemoApplication {
 		List<String> freq1 = top3SkillsDuringPeakTime.get(1);
 
 		// Creating the charts
+		// An array of JFreeChart objects is created.
+		// Each chart is created by calling the createChart method with specific parameters.
 		JFreeChart[] charts = new JFreeChart[]{
 				createChart("Top 3 panels for the month of Oct and Nov", panels.get(0).getPanelName(),panels.get(0).getNoOfInterviews(), panels.get(1).getPanelName(), panels.get(1).getNoOfInterviews(), panels.get(2).getPanelName(), panels.get(2).getNoOfInterviews()),
 				createChart("Top 3 skills for the months of Oct and Nov", skills.get(0), Integer.parseInt(freq.get(0)),skills.get(1), Integer.parseInt(freq.get(1)), skills.get(2), Integer.parseInt(freq.get(2))),
 				createChart("Top 3 skills for which interviews were conducted", skills1.get(0), Integer.parseInt(freq1.get(0)),skills1.get(1), Integer.parseInt(freq1.get(1)), skills1.get(2), Integer.parseInt(freq1.get(2)))
 		};
 
-		// Calculate the height for each chart
+		//The code calculates the height available for each chart on the PDF page by dividing the total height of an A4 page by the number of charts.
 		float chartHeight = PageSize.A4.getHeight()/ charts.length;
 
-		//Draw each chart on a new line
+		//The code iterates through each chart in the array.
 		for(int i=0;i<charts.length;i++)
 		{
-			//Create a Pdf template with the size of the chart
 			PdfContentByte contentByte = writer.getDirectContent();
+			// For each chart, it creates a Pdf template with the specified size.
 			PdfTemplate template = contentByte.createTemplate(PageSize.A4.getWidth(),chartHeight);
+			// It creates a Graphics2D object from the template and draws the current chart onto the template.
 			Graphics2D graphics2D = template.createGraphics(PageSize.A4.getWidth(), chartHeight);
 
 			// Draw the charts on the template
@@ -101,18 +106,21 @@ public class DemoApplication {
 			//Close the graphics object
 			graphics2D.dispose();
 
-			// Add the template to the documentat the correcct position
+			// Add the template to the document at the correct position
 			contentByte.addTemplate(template,0,PageSize.A4.getHeight() - chartHeight*(i+1));
 		}
 		document.close();
 
 	}
-	private static JFreeChart createChart(String title, String product1, int value1, String product2, int value2, String product3, int value3) {
+	private static JFreeChart createChart(String title, String type1, int value1, String type2, int value2, String type3, int value3) {
+		// It creates a DefaultPieDataset, which is a dataset for pie charts.
 		DefaultPieDataset dataset = new DefaultPieDataset();
-		dataset.setValue(product1, value1);
-		dataset.setValue(product2, value2);
-		dataset.setValue(product3, value3);
+		// Adds the data to the pieChart.
+		dataset.setValue(type1, value1);
+		dataset.setValue(type2, value2);
+		dataset.setValue(type3, value3);
 
+		// creates the pieChart.
 		JFreeChart pieChart = ChartFactory.createPieChart(
 				title,
 				dataset,
@@ -120,7 +128,9 @@ public class DemoApplication {
 				true,
 				false);
 
+		// Retrieves the piePlot from the pieChart
 		PiePlot plot = (PiePlot) pieChart.getPlot();
+		// We are setting the labels {0} represents type {1} represents the values and {2} repesents the percentage
 		plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0} = {1} ({2})"));
 
 		return pieChart;

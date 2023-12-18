@@ -63,8 +63,9 @@ public class DbQueries{
                          "GROUP BY team "+
                          "ORDER BY count "+
                          "LIMIT 1";
-
+            // A PreparedStatement is created using the SQL query, and it is executed to obtain a ResultSet.
             PreparedStatement stmt = conn.prepareStatement(sql);
+            // ResultSet contains the result of the query
             ResultSet rs = stmt.executeQuery();
 
             if(rs.next()){
